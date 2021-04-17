@@ -6,22 +6,18 @@ from PIL import Image
 
 included_extensions = ['.jpg','.jpeg', '.bmp', '.png', '.JPG', '.JPEG', '.BMP', '.PNG']
 
-def list_images():
-    dirname = os.path.dirname(__file__)
-    path = os.path.join(dirname, r'./photos/')
-    file_names = [fn for fn in os.listdir(path)
+def list_images():    
+    file_names = [fn for fn in os.listdir('./photos/')
               if any(fn.endswith(ext) for ext in included_extensions)]
+    print(file_names)
     return file_names   
 
 def thumbnail_image(imageName):
-    try:
-        dirname = os.path.dirname(__file__)
-        inPath = os.path.join(dirname, r'./photos/')
-        imgPath = inPath + imageName
+    try:    
+        imgPath = './photos/' + imageName
         img = Image.open(imgPath)
         img.thumbnail((1024, 768), resample=Image.NEAREST)
-        outPath = os.path.join(dirname, r'./resize/')
-        img.save(outPath + imageName)
+        img.save('./resize/' + imageName)
     except FileNotFoundError:
         print('Error: Provided image path is not found')    
 
@@ -33,12 +29,9 @@ def zip_files_in_dir(dirName, zipFileName):
                 zipObj.write(filePath, basename(filePath))
 
 def main():
-    dirname = os.path.dirname(__file__)
     try:
-        outPath = os.path.join(dirname, './resize_photos.zip')
-        os.remove(outPath)
-        outPath = os.path.join(dirname, './resize')
-        os.mkdir(outPath)
+        os.remove( './resize_photos.zip')
+        os.mkdir('./resize')
     except FileNotFoundError:
         print('Error: Provided zip path is not found')    
 
@@ -48,10 +41,8 @@ def main():
     
     try:
         for image in list_images():
-            outPath = os.path.join(dirname, './resize/' + image)
-            os.remove(outPath)
-        outPath = os.path.join(dirname, './resize')
-        os.rmdir(outPath)
+            os.remove('./resize/' + image)
+        os.rmdir('./resize')
     except FileNotFoundError:
         print('Error: Provided image path is not found')    
 
